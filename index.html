@@ -60,7 +60,7 @@
     .hero-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;margin-bottom:18px;background:rgba(196,146,58,.14);border:1px solid rgba(196,146,58,.27);font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold-l);}
     .hero-dot{width:5px;height:5px;border-radius:50%;background:var(--gold-l);animation:blink 2s ease-in-out infinite;}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-    .hero h1{font-family:'Lora',serif;font-size:clamp(36px,5vw,60px);font-weight:600;line-height:1.1;color:#fff;margin-bottom:16px;letter-spacing:-.5px;text-shadow:0 2px 24px rgba(0,0,0,.5);}
+    .hero h1{font-family:'Lora',serif;font-size:clamp(36px,5vw,60px);font-weight:600;line-height:1.1;color: #ffffff !important;margin-bottom:16px;letter-spacing:-.5px;text-shadow:0 2px 24px rgba(0,0,0,.5);}
     .hero h1 em{color:var(--gold-l);font-style:italic;}
     .hero-sub{font-size:15.5px;line-height:1.78;color:rgba(255,255,255,.82);max-width:400px;margin-bottom:28px;}
     .hero-ctas{display:flex;gap:10px;flex-wrap:wrap;}
@@ -114,22 +114,29 @@
     #reviews{padding:92px 0;background:var(--g0);overflow:hidden;}
     .rev-hdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;}
     .rev-hdr .sec-tag{color:var(--gold-l);}
-    .carousel-outer{overflow:hidden;mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);-webkit-mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);}
-    .carousel-track{display:flex;gap:16px;transition:transform .85s cubic-bezier(.4,0,.2,1);}
-    .rev-card{flex-shrink:0;width:360px;background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.09);border-radius:var(--r-lg);padding:24px;backdrop-filter:blur(10px);}
-    .rev-stars{display:flex;gap:3px;margin-bottom:11px;}
-    .rev-stars svg{width:14px;height:14px;}
+    .carousel-outer{position:relative;min-height:180px;}
+    .rev-card{
+      display:none;
+      background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.09);
+      border-radius:var(--r-lg);padding:36px 48px;backdrop-filter:blur(10px);
+      max-width:680px;margin:0 auto;
+      animation:revFadeIn .5s ease;
+    }
+    .rev-card.active{display:block;}
+    @keyframes revFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .rev-stars{display:flex;gap:4px;margin-bottom:13px;}
+    .rev-stars svg{width:16px;height:16px;}
     .star-on{fill:var(--gold-l);color:var(--gold-l);}
     .star-off{fill:rgba(255,255,255,.12);color:rgba(255,255,255,.12);}
-    .rev-text{font-size:14px;line-height:1.7;color:rgba(255,255,255,.68);font-style:italic;margin-bottom:18px;}
-    .rev-author{display:flex;align-items:center;gap:10px;}
-    .rev-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--g2),var(--g4));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:13px;flex-shrink:0;}
-    .rev-name{font-size:13.5px;font-weight:600;color:#fff;}
-    .rev-svc{font-size:11px;color:rgba(255,255,255,.32);margin-top:2px;}
+    .rev-text{font-size:15px;line-height:1.75;color:rgba(255,255,255,.78);font-style:italic;margin-bottom:22px;}
+    .rev-author{display:flex;align-items:center;gap:11px;}
+    .rev-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--g2),var(--g4));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:14px;flex-shrink:0;}
+    .rev-name{font-size:14px;font-weight:600;color:#fff;}
+    .rev-svc{font-size:12px;color:rgba(255,255,255,.35);margin-top:2px;}
     .rev-dots{display:flex;gap:7px;justify-content:center;margin-top:26px;}
     .rdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.18);transition:all .3s;cursor:pointer;border:none;}
     .rdot.on{background:var(--gold-l);width:20px;border-radius:100px;}
-    @media(max-width:600px){.rev-hdr{flex-direction:column;align-items:flex-start;gap:12px;}}
+    @media(max-width:600px){.rev-hdr{flex-direction:column;align-items:flex-start;gap:12px;}.rev-card{padding:24px 22px;}}
 
     /* BOOKING */
     #book{padding:92px 0;background:var(--cream);}
@@ -334,7 +341,7 @@
       <div><div class="sec-tag">Reviews</div><h2 style="color:#fff">What customers say</h2></div>
       <button class="btn btn-gold" id="openRevBtn">Leave a Review</button>
     </div>
-    <div class="carousel-outer"><div class="carousel-track" id="carouselTrack"></div></div>
+    <div class="carousel-outer" id="carouselOuter"></div>
     <div class="rev-dots" id="revDots"></div>
     <div id="noRevs" class="hidden" style="text-align:center;padding:36px;color:rgba(255,255,255,.32);font-size:15px;">No reviews yet — be the first!</div>
   </div>
@@ -499,8 +506,18 @@
       <div class="astat"><div class="astat-n" id="aToday">—</div><div class="astat-l">Booked Today</div></div>
       <div class="astat"><div class="astat-n" id="aRec">—</div><div class="astat-l">Recurring</div></div>
     </div>
-    <div class="admin-sec-title">All Bookings — newest first</div>
-    <div id="ordersList"></div>
+    <div style="display:flex;gap:0;border:1.5px solid var(--bdr);border-radius:var(--r);overflow:hidden;margin-bottom:22px;width:fit-content;">
+      <button id="tabBookings" onclick="adminTab('bookings')" style="padding:8px 20px;font-size:14px;font-weight:600;border:none;cursor:pointer;background:var(--g1);color:#fff;transition:all .2s;">Bookings</button>
+      <button id="tabReviews" onclick="adminTab('reviews')" style="padding:8px 20px;font-size:14px;font-weight:600;border:none;cursor:pointer;background:none;color:var(--txt-3);transition:all .2s;">Reviews</button>
+    </div>
+    <div id="bookingsPanel">
+      <div class="admin-sec-title">All Bookings — newest first</div>
+      <div id="ordersList"></div>
+    </div>
+    <div id="reviewsPanel" class="hidden">
+      <div class="admin-sec-title">All Reviews — click 🗑 to delete</div>
+      <div id="reviewsList"></div>
+    </div>
   </div>
 </div>
 
@@ -772,25 +789,46 @@ window.resetForm=function(){
 
 /* ═══════════ CAROUSEL ═══════════ */
 let cIdx=0,cData=[],cTimer=null;
-const CW=376;
+
 function renderCarousel(reviews){
   cData=reviews;
-  const track=document.getElementById('carouselTrack'),dots=document.getElementById('revDots'),noR=document.getElementById('noRevs');
-  if(!reviews.length){track.innerHTML='';dots.innerHTML='';noR.classList.remove('hidden');return;}
+  const outer=document.getElementById('carouselOuter');
+  const dots=document.getElementById('revDots');
+  const noR=document.getElementById('noRevs');
+  if(!reviews.length){outer.innerHTML='';dots.innerHTML='';noR.classList.remove('hidden');return;}
   noR.classList.add('hidden');
-  track.innerHTML=reviews.map(r=>`
-    <div class="rev-card">
-      <div class="rev-stars">${[1,2,3,4,5].map(i=>`<svg class="${i<=r.rating?'star-on':'star-off'}" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" stroke="currentColor" stroke-width="1.5"/></svg>`).join('')}</div>
+  // Render all cards, only the active one is visible
+  outer.innerHTML=reviews.map((r,i)=>`
+    <div class="rev-card ${i===0?'active':''}" id="rc-${i}">
+      <div class="rev-stars">${[1,2,3,4,5].map(n=>`<svg class="${n<=r.rating?'star-on':'star-off'}" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" stroke="currentColor" stroke-width="1.5"/></svg>`).join('')}</div>
       <div class="rev-text">${esc(r.text)}</div>
-      <div class="rev-author"><div class="rev-av">${(r.name||'?')[0].toUpperCase()}</div><div><div class="rev-name">${esc(r.name||'Anonymous')}</div><div class="rev-svc">${esc(r.service||'')}</div></div></div>
+      <div class="rev-author">
+        <div class="rev-av">${(r.name||'?')[0].toUpperCase()}</div>
+        <div><div class="rev-name">${esc(r.name||'Anonymous')}</div><div class="rev-svc">${esc(r.service||'')}</div></div>
+      </div>
     </div>`).join('');
-  const dc=Math.min(reviews.length,7);
-  dots.innerHTML=Array.from({length:dc},(_,i)=>`<button class="rdot ${i===0?'on':''}" onclick="jumpTo(${i})"></button>`).join('');
+  dots.innerHTML=reviews.map((_,i)=>`<button class="rdot ${i===0?'on':''}" onclick="jumpTo(${i})"></button>`).join('');
+  cIdx=0;
   startC();
 }
-function applyC(){document.getElementById('carouselTrack').style.transform=`translateX(-${cIdx*CW}px)`;document.querySelectorAll('.rdot').forEach((d,i)=>d.classList.toggle('on',i===cIdx%Math.min(cData.length,7)));}
-function startC(){if(cTimer)clearInterval(cTimer);cTimer=setInterval(()=>{cIdx=(cIdx+1)%cData.length;applyC();},4500);}
-window.jumpTo=i=>{cIdx=i;applyC();startC();};
+
+function showCard(i){
+  // hide current
+  const cur=document.getElementById(`rc-${cIdx}`);
+  if(cur) cur.classList.remove('active');
+  cIdx=i;
+  // show new
+  const next=document.getElementById(`rc-${cIdx}`);
+  if(next) next.classList.add('active');
+  document.querySelectorAll('.rdot').forEach((d,di)=>d.classList.toggle('on',di===cIdx));
+}
+
+function startC(){
+  if(cTimer)clearInterval(cTimer);
+  cTimer=setInterval(()=>showCard((cIdx+1)%cData.length),5000);
+}
+
+window.jumpTo=i=>{showCard(i);startC();};
 
 async function loadReviews(){
   try {
@@ -840,6 +878,15 @@ window.submitReview=async()=>{
 /* ═══════════ ADMIN ═══════════ */
 window.openAdmin=()=>{document.getElementById('adminPanel').classList.add('open');loadOrders();};
 window.closeAdmin=()=>document.getElementById('adminPanel').classList.remove('open');
+
+window.adminTab=function(tab){
+  document.getElementById('bookingsPanel').classList.toggle('hidden',tab!=='bookings');
+  document.getElementById('reviewsPanel').classList.toggle('hidden',tab!=='reviews');
+  document.getElementById('tabBookings').style.cssText=tab==='bookings'?'padding:8px 20px;font-size:14px;font-weight:600;border:none;cursor:pointer;background:var(--g1);color:#fff;':'padding:8px 20px;font-size:14px;font-weight:600;border:none;cursor:pointer;background:none;color:var(--txt-3);';
+  document.getElementById('tabReviews').style.cssText=tab==='reviews'?'padding:8px 20px;font-size:14px;font-weight:600;border:none;cursor:pointer;background:var(--g1);color:#fff;':'padding:8px 20px;font-size:14px;font-weight:600;border:none;cursor:pointer;background:none;color:var(--txt-3);';
+  if(tab==='reviews') loadAdminReviews();
+};
+
 window.loadOrders=async()=>{
   document.getElementById('ordersList').innerHTML='<div class="empty-state">Loading…</div>';
   try {
@@ -855,7 +902,6 @@ window.loadOrders=async()=>{
     if(!orders.length){document.getElementById('ordersList').innerHTML='<div class="empty-state">No bookings yet.</div>';return;}
     const FL={one_time:'One-time',weekly:'Weekly',biweekly:'Bi-weekly',monthly:'Monthly'};
     const TL={any:'Any time',morning:'Morning',afternoon:'Afternoon',evening:'Evening'};
-    // Newest first
     const sorted=[...orders].reverse();
     document.getElementById('ordersList').innerHTML=sorted.map(o=>`
       <div class="order-card">
@@ -872,6 +918,40 @@ window.loadOrders=async()=>{
         ${o.submittedAt?`<div class="oc-time">Submitted ${new Date(o.submittedAt).toLocaleString()}</div>`:''}
       </div>`).join('');
   } catch(e){ document.getElementById('ordersList').innerHTML=`<div class="empty-state">Error: ${e.message}</div>`; }
+};
+
+window.loadAdminReviews=async()=>{
+  document.getElementById('reviewsList').innerHTML='<div class="empty-state">Loading…</div>';
+  try {
+    const res=await getReviews();
+    const reviews=res.data||[];
+    if(!reviews.length){document.getElementById('reviewsList').innerHTML='<div class="empty-state">No reviews yet.</div>';return;}
+    document.getElementById('reviewsList').innerHTML=reviews.map((r,i)=>`
+      <div class="order-card" id="rev-row-${i}" style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+            <strong style="font-size:14px;color:var(--g0);">${esc(r.name||'Anonymous')}</strong>
+            <span style="font-size:11px;background:var(--g6);color:var(--g2);padding:2px 8px;border-radius:100px;font-weight:700;">${esc(r.service||'')}</span>
+            <span style="color:var(--gold);font-size:13px;">${'★'.repeat(r.rating||0)}${'☆'.repeat(5-(r.rating||0))}</span>
+          </div>
+          <div style="font-size:13px;color:var(--txt-2);font-style:italic;">"${esc(r.text||'')}"</div>
+          ${r.submittedAt?`<div style="font-size:11px;color:var(--txt-3);margin-top:5px;">${new Date(r.submittedAt).toLocaleString()}</div>`:''}
+        </div>
+        <button onclick="deleteReview(${i})" id="del-btn-${i}" style="flex-shrink:0;background:#fff0f0;border:1.5px solid #ffd0d0;color:#c0392b;border-radius:8px;padding:7px 12px;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap;">🗑 Delete</button>
+      </div>`).join('');
+  } catch(e){ document.getElementById('reviewsList').innerHTML=`<div class="empty-state">Error: ${e.message}</div>`; }
+};
+
+window.deleteReview=async(idx)=>{
+  if(!confirm('Delete this review? This cannot be undone.')) return;
+  const btn=document.getElementById(`del-btn-${idx}`);
+  btn.textContent='Deleting…'; btn.disabled=true;
+  try {
+    await apiCall('deleteReview',{index:idx});
+    showToast('Review deleted');
+    loadAdminReviews();
+    loadReviews();
+  } catch(e){ showToast('Could not delete: '+e.message,true); btn.textContent='🗑 Delete'; btn.disabled=false; }
 };
 
 /* ═══════════ TOAST ═══════════ */
