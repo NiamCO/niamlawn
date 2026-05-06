@@ -146,6 +146,9 @@
     .ci-list{display:flex;flex-direction:column;gap:12px;}
     .ci{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--txt-2);}
     .ci svg{width:15px;height:15px;color:var(--g3);flex-shrink:0;}
+    /* Summer banner */
+    .summer-banner{background:linear-gradient(135deg,#fef9e7,#fef3dc);border:1.5px solid var(--gold);border-radius:var(--r);padding:12px 15px;margin-bottom:18px;font-size:13px;color:#7a5a1a;}
+    .summer-banner strong{color:#5a3e0a;display:block;margin-bottom:3px;}
     .form-card{background:#fff;border:1.5px solid var(--bdr);border-radius:var(--r-lg);padding:32px;box-shadow:var(--sh);}
     .stepper{display:flex;margin-bottom:26px;}
     .si{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
@@ -183,6 +186,8 @@
     .success-ico svg{width:26px;height:26px;color:var(--g3);}
     .success-box h3{font-family:'Lora',serif;font-size:21px;font-weight:600;color:var(--g0);margin-bottom:8px;}
     .success-box p{font-size:14px;color:var(--txt-2);line-height:1.65;}
+    /* Unavailable date warning */
+    .date-warn{font-size:12px;color:#c0392b;margin-top:4px;display:none;}
     @media(max-width:768px){.book-grid{grid-template-columns:1fr;}}
 
     /* MODAL */
@@ -224,12 +229,6 @@
     .empty-state{text-align:center;padding:56px 20px;color:var(--txt-3);font-size:15px;}
     @media(max-width:600px){.admin-stats{grid-template-columns:1fr 1fr;}.admin-body{padding:18px;}.admin-nav{padding:12px 18px;}}
 
-    /* SETUP BANNER */
-    #setupBanner{background:#fef3dc;border-bottom:2px solid var(--gold);padding:12px 52px;font-size:13px;color:#7a5a1a;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-    #setupBanner strong{color:#5a3e0a;}
-    #setupBanner a{color:var(--gold);font-weight:700;}
-    #setupBanner button{margin-left:auto;background:none;border:none;cursor:pointer;font-size:18px;color:#7a5a1a;line-height:1;}
-
     #toast{position:fixed;bottom:22px;right:22px;z-index:3000;background:var(--g1);color:#fff;padding:11px 18px;border-radius:var(--r);font-size:13.5px;font-weight:500;box-shadow:var(--sh-md);display:flex;align-items:center;gap:7px;max-width:300px;transform:translateY(65px);opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);}
     #toast.show{transform:translateY(0);opacity:1;}
     #toast.err{background:#c0392b;}
@@ -241,11 +240,6 @@
   </style>
 </head>
 <body>
-
-<!-- SETUP BANNER — hidden once script URL is set -->
-<div id="setupBanner">
-  <span>⚙️ <strong>Setup needed:</strong> Paste your Google Apps Script URL into the <code>SCRIPT_URL</code> variable at the bottom of this file. <a href="#" onclick="document.getElementById('setupBanner').remove()">Dismiss</a></span>
-</div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -356,11 +350,19 @@
         <div class="sec-tag">Get Started</div>
         <h2>Book an Appointment</h2>
         <p class="lead">Fill out the short form and I'll reach out to confirm your date and time. Usually same-week availability.</p>
+
+        <!-- Summer availability banner — shown Jun 21–Aug 21 -->
+        <div class="summer-banner" id="summerBanner" style="display:none;">
+          <strong>☀️ Summer availability!</strong>
+          I'm free all day every day June 21 – August 21 (except July 6–12, I'm at camp). Book any time that works for you!
+        </div>
+
         <div class="ci-list">
           <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Sammamish, WA and nearby areas</div>
-          <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Mon, Tue, Thu, Fri — available after 3:20pm</div>
-          <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Wednesdays — available after 4:10pm (short day)</div>
-          <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Weekends — available all day</div>
+          <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Mon, Tue, Thu, Fri — available after 3:00pm</div>
+          <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Wednesdays — available after 4:00pm (short day)</div>
+          <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Weekends — available all day (subject to my schedule)</div>
+          <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Summer (Jun 21–Aug 21) — available all day, every day!</div>
           <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.94-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.72 16z"/></svg>I'll confirm by phone or email</div>
         </div>
       </div>
@@ -383,8 +385,22 @@
           <div class="fstep-title">About your property</div>
           <div class="fg"><label>Street Address</label><input type="text" id="addr" placeholder="123 Maple St, Sammamish, WA"/></div>
           <div class="fg-row">
-            <div class="fg"><label>Preferred Date</label><input type="date" id="prefDate"/></div>
-            <div class="fg"><label>Preferred Time</label><select id="prefTime"><option value="any">Any time</option><option value="morning">Morning (8am–12pm)</option><option value="afternoon">Afternoon (12pm–4pm)</option><option value="evening">Evening (4pm–7pm)</option></select></div>
+            <div class="fg">
+              <label>Preferred Date</label>
+              <input type="date" id="prefDate" onchange="checkDateAvailability()"/>
+              <div class="date-warn" id="dateWarn"></div>
+            </div>
+            <div class="fg">
+              <label>Preferred Time</label>
+              <select id="prefTime">
+                <option value="any">Any available time</option>
+                <option value="after3">After 3:00pm (weekdays)</option>
+                <option value="after4">After 4:00pm (Wednesdays)</option>
+                <option value="morning">Morning (weekends / summer only)</option>
+                <option value="afternoon">Afternoon (weekends / summer only)</option>
+                <option value="evening">Evening (5pm–7pm)</option>
+              </select>
+            </div>
           </div>
           <div class="fg"><label>How often?</label>
             <div class="radio-grid">
@@ -552,7 +568,6 @@
   display:none;flex-direction:column;overflow:hidden;
   animation:chatPop .25s cubic-bezier(.4,0,.2,1);
 ">
-  <!-- chat header -->
   <div style="background:var(--g1);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
     <div style="display:flex;align-items:center;gap:10px;">
       <div style="width:34px;height:34px;border-radius:50%;background:var(--g3);display:flex;align-items:center;justify-content:center;">
@@ -567,8 +582,13 @@
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
-  <!-- iframe -->
   <iframe src="https://niamco.github.io/lawn-chat" style="flex:1;border:none;width:100%;" allow="clipboard-write"></iframe>
+</div>
+
+<!-- TOAST -->
+<div id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg"></span>
 </div>
 
 <style>
@@ -583,7 +603,6 @@
 window.openChat=function(){
   const w=document.getElementById('chatWidget');
   w.style.display='flex';
-  // re-trigger animation
   w.style.animation='none';
   w.offsetHeight;
   w.style.animation='chatPop .25s cubic-bezier(.4,0,.2,1)';
@@ -596,25 +615,92 @@ window.closeChat=function(){
 </script>
 
 <script>
-// ═══════════════════════════════════════════════════════
-//  ↓↓↓  PASTE YOUR GOOGLE APPS SCRIPT URL HERE  ↓↓↓
-// ═══════════════════════════════════════════════════════
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOMX8nk32jZvreyOFtXu0Hh5aCy_-khr1X81BEYL7qmrNm3vFfUjFQ25_7uEfB94as/exec';
-// ═══════════════════════════════════════════════════════
-
-// ── ADMIN: change this to your own email ──
 const ADMIN_EMAIL = 'niamnangalia@outlook.com';
 
-// ── Hide setup banner if URL is set ──
-if (SCRIPT_URL) document.getElementById('setupBanner')?.remove();
+/* ═══ AVAILABILITY LOGIC ═══ */
+// Unavailable date ranges (YYYY-MM-DD)
+const UNAVAILABLE_RANGES = [
+  { start:'2026-07-06', end:'2026-07-12', reason:'Summer camp — I\'m away all week!' },
+];
+// This specific weekend campout
+const UNAVAILABLE_DATES = ['2026-05-09','2026-05-10'];
 
-/* ═══════════ AUTH (localStorage — no backend needed) ═══════════ */
+// Summer: Jun 21 – Aug 21 = all day available
+// School year weekdays: available after 3pm (Mon/Tue/Thu/Fri) or 4pm (Wed)
+// School year weekends: available all day (except specific dates)
+
+function isSummer(dateStr) {
+  if (!dateStr) return false;
+  const d = new Date(dateStr + 'T12:00:00');
+  const y = d.getFullYear();
+  const summerStart = new Date(`${y}-06-21T00:00:00`);
+  const summerEnd   = new Date(`${y}-08-21T23:59:59`);
+  return d >= summerStart && d <= summerEnd;
+}
+
+function getDateStatus(dateStr) {
+  if (!dateStr) return { ok: true };
+  const d = new Date(dateStr + 'T12:00:00');
+  const dow = d.getDay(); // 0=Sun, 1=Mon ... 6=Sat
+
+  // Check fully unavailable dates
+  if (UNAVAILABLE_DATES.includes(dateStr)) {
+    return { ok: false, warn: "I have a campout this weekend — I'm not available. Please pick another date!" };
+  }
+
+  // Check unavailable ranges
+  for (const r of UNAVAILABLE_RANGES) {
+    if (dateStr >= r.start && dateStr <= r.end) {
+      return { ok: false, warn: `I'm unavailable (${r.reason}) — please pick a different date.` };
+    }
+  }
+
+  if (isSummer(dateStr)) {
+    return { ok: true, info: '☀️ Summer — I\'m free all day!' };
+  }
+
+  // School year
+  if (dow === 3) { // Wednesday
+    return { ok: true, info: 'Wednesday — I\'m available after 4:00pm.' };
+  } else if (dow >= 1 && dow <= 5) { // Mon–Fri
+    return { ok: true, info: 'Weekday — I\'m available after 3:00pm.' };
+  } else { // Weekend
+    return { ok: true, info: 'Weekend — I\'m available all day.' };
+  }
+}
+
+window.checkDateAvailability = function() {
+  const val = document.getElementById('prefDate').value;
+  const warn = document.getElementById('dateWarn');
+  const status = getDateStatus(val);
+  warn.style.display = val ? 'block' : 'none';
+  if (!status.ok) {
+    warn.style.color = '#c0392b';
+    warn.textContent = status.warn;
+  } else if (status.info) {
+    warn.style.color = 'var(--g3)';
+    warn.textContent = status.info;
+  } else {
+    warn.style.display = 'none';
+  }
+};
+
+// Show summer banner if we're in summer season
+function checkSummerBanner() {
+  const today = new Date().toISOString().split('T')[0];
+  if (isSummer(today)) {
+    document.getElementById('summerBanner').style.display = 'block';
+  }
+}
+
+/* ═══ AUTH ═══ */
 let currentUser = null;
-
 function authInit() {
   const saved = localStorage.getItem('nlc_user');
   if (saved) { try { currentUser = JSON.parse(saved); } catch(e){} }
   renderNav();
+  checkSummerBanner();
 }
 
 function renderNav() {
@@ -648,7 +734,6 @@ window.doSignup = function() {
   if (!first||!email||!pass) { err.textContent='Please fill in all fields.'; return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent='Please enter a valid email.'; return; }
   if (pass.length<6) { err.textContent='Password must be at least 6 characters.'; return; }
-  // Check if email already exists
   const users = JSON.parse(localStorage.getItem('nlc_users')||'[]');
   if (users.find(u=>u.email===email)) { err.textContent='An account with that email already exists.'; return; }
   const user = { firstName:first, lastName:last, email, passHash:btoa(pass), createdAt:new Date().toISOString() };
@@ -656,8 +741,7 @@ window.doSignup = function() {
   localStorage.setItem('nlc_users', JSON.stringify(users));
   currentUser = user;
   localStorage.setItem('nlc_user', JSON.stringify(user));
-  closeAuth();
-  renderNav();
+  closeAuth(); renderNav();
   showToast('Account created — welcome!');
 };
 
@@ -672,8 +756,7 @@ window.doLogin = function() {
   if (!user) { err.textContent='Invalid email or password.'; return; }
   currentUser = user;
   localStorage.setItem('nlc_user', JSON.stringify(user));
-  closeAuth();
-  renderNav();
+  closeAuth(); renderNav();
   showToast('Welcome back!');
 };
 
@@ -684,24 +767,20 @@ window.doSignOut = function() {
   showToast('Signed out.');
 };
 
-/* ═══════════ API CALLS TO GOOGLE APPS SCRIPT ═══════════ */
+/* ═══ API ═══ */
 async function apiCall(action, data) {
   if (!SCRIPT_URL) throw new Error('Script URL not configured');
-  const res = await fetch(SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify({ action, ...data })
-  });
+  const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify({action,...data}) });
   const json = await res.json();
   if (json.error) throw new Error(json.error);
   return json;
 }
-
 async function saveBooking(data) { return apiCall('addBooking', data); }
 async function saveReview(data)  { return apiCall('addReview', data); }
 async function getReviews()      { return apiCall('getReviews', {}); }
 async function getBookings()     { return apiCall('getBookings', {}); }
 
-/* ═══════════ SERVICES DATA ═══════════ */
+/* ═══ SERVICES ═══ */
 const SERVICES = [
   { id:'mowing', name:'Lawn Mowing', price:'$30', badge:null,
     desc:'Clean, even mowing for front and/or back yard. Quality equipment, no mess left behind.',
@@ -746,15 +825,6 @@ const SERVICES = [
     ]},
 ];
 
-const DEMO_REVIEWS = [
-  {name:'Sarah M.',service:'Full Yard Package',rating:5,text:"Niam did an amazing job on our yard. Super punctual, thorough, and left the lawn looking better than it ever has. Already booked him for next month."},
-  {name:'James T.',service:'Lawn Mowing + Edging',rating:5,text:"Really impressed. He showed up exactly on time, worked efficiently, and the edging along the driveway looks perfect. Great local option."},
-  {name:'Linda K.',service:'Leaf & Debris Cleanup',rating:5,text:"Our backyard was a mess after the storm. Niam cleaned it up in under 2 hours and even swept the patio. Highly recommend."},
-  {name:'Roberto F.',service:'Hedge Trimming',rating:4,text:"Clean, tidy work on our front hedges. They look great now. Very professional — a solid local business."},
-  {name:'Amy W.',service:'Lawn Mowing',rating:5,text:"We needed someone reliable and Niam delivered. The lawn looks clean, the clippings were cleared up, and he was very respectful. 5 stars."},
-];
-
-/* ═══════════ RENDER SERVICES ═══════════ */
 function renderServices() {
   document.getElementById('svcGrid').innerHTML = SERVICES.map(s=>`
     <div class="svc-card" onclick="pickSvc('${s.id}')">
@@ -778,11 +848,19 @@ function renderQs(id) {
   }).join('');
 }
 
-/* ═══════════ FORM STEPPER ═══════════ */
+/* ═══ FORM STEPPER ═══ */
 let curStep=1;
 window.goStep=function(n){
   if(n>curStep){
     if(curStep===1&&!document.getElementById('svcSel').value){showToast('Please select a service first',true);return;}
+    if(curStep===2){
+      // Warn if date is unavailable but don't hard-block
+      const dateVal = document.getElementById('prefDate').value;
+      const status = getDateStatus(dateVal);
+      if (dateVal && !status.ok) {
+        if (!confirm(status.warn + '\n\nContinue anyway and I\'ll follow up to reschedule?')) return;
+      }
+    }
     if(curStep===3){
       const fn=document.getElementById('fname').value.trim(),em=document.getElementById('bemail').value.trim(),ph=document.getElementById('bphone').value.trim();
       const err=document.getElementById('s3err');
@@ -802,13 +880,15 @@ window.goStep=function(n){
 function buildSummary(){
   const id=document.getElementById('svcSel').value, svc=SERVICES.find(s=>s.id===id);
   const fl={one_time:'One-time',weekly:'Weekly',biweekly:'Bi-weekly',monthly:'Monthly'};
-  const tl={any:'Any time',morning:'Morning (8am–12pm)',afternoon:'Afternoon (12pm–4pm)',evening:'Evening (4pm–7pm)'};
+  const tl={any:'Any available time',after3:'After 3:00pm (weekdays)',after4:'After 4:00pm (Wednesdays)',morning:'Morning (weekends/summer)',afternoon:'Afternoon (weekends/summer)',evening:'Evening (5pm–7pm)'};
   const f=document.querySelector('input[name="freq"]:checked')?.value||'one_time';
   const t=document.getElementById('prefTime').value||'any';
+  const dateVal=document.getElementById('prefDate').value;
+  const status=getDateStatus(dateVal);
   document.getElementById('summaryBox').innerHTML=`
     <strong>Service:</strong> ${svc?.name||id}<br>
     <strong>Address:</strong> ${document.getElementById('addr').value||'(not provided)'}<br>
-    <strong>Date:</strong> ${document.getElementById('prefDate').value||'Flexible'}<br>
+    <strong>Date:</strong> ${dateVal||'Flexible'}${status.info?' <span style="color:var(--g3);font-size:12px;">'+status.info+'</span>':''}<br>
     <strong>Time:</strong> ${tl[t]||t}<br>
     <strong>Frequency:</strong> ${fl[f]||f}<br>
     <strong>Name:</strong> ${document.getElementById('fname').value} ${document.getElementById('lname').value}<br>
@@ -840,7 +920,7 @@ window.submitBooking = async function(){
   } catch(e) {
     document.getElementById('s4err').textContent = SCRIPT_URL
       ? 'Could not submit. Please try again.'
-      : 'Script URL not set up yet — see setup instructions.';
+      : 'Script URL not set up yet.';
     console.error(e);
     btn.disabled=false;
     btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Confirm Booking`;
@@ -859,9 +939,8 @@ window.resetForm=function(){
   btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Confirm Booking`;
 };
 
-/* ═══════════ CAROUSEL ═══════════ */
+/* ═══ CAROUSEL ═══ */
 let cIdx=0,cData=[],cTimer=null;
-
 function renderCarousel(reviews){
   cData=reviews;
   const outer=document.getElementById('carouselOuter');
@@ -869,7 +948,6 @@ function renderCarousel(reviews){
   const noR=document.getElementById('noRevs');
   if(!reviews.length){outer.innerHTML='';dots.innerHTML='';noR.classList.remove('hidden');return;}
   noR.classList.add('hidden');
-  // Render all cards, only the active one is visible
   outer.innerHTML=reviews.map((r,i)=>`
     <div class="rev-card ${i===0?'active':''}" id="rc-${i}">
       <div class="rev-stars">${[1,2,3,4,5].map(n=>`<svg class="${n<=r.rating?'star-on':'star-off'}" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" stroke="currentColor" stroke-width="1.5"/></svg>`).join('')}</div>
@@ -880,26 +958,15 @@ function renderCarousel(reviews){
       </div>
     </div>`).join('');
   dots.innerHTML=reviews.map((_,i)=>`<button class="rdot ${i===0?'on':''}" onclick="jumpTo(${i})"></button>`).join('');
-  cIdx=0;
-  startC();
+  cIdx=0; startC();
 }
-
 function showCard(i){
-  // hide current
-  const cur=document.getElementById(`rc-${cIdx}`);
-  if(cur) cur.classList.remove('active');
+  const cur=document.getElementById(`rc-${cIdx}`); if(cur) cur.classList.remove('active');
   cIdx=i;
-  // show new
-  const next=document.getElementById(`rc-${cIdx}`);
-  if(next) next.classList.add('active');
+  const next=document.getElementById(`rc-${cIdx}`); if(next) next.classList.add('active');
   document.querySelectorAll('.rdot').forEach((d,di)=>d.classList.toggle('on',di===cIdx));
 }
-
-function startC(){
-  if(cTimer)clearInterval(cTimer);
-  cTimer=setInterval(()=>showCard((cIdx+1)%cData.length),5000);
-}
-
+function startC(){ if(cTimer)clearInterval(cTimer); cTimer=setInterval(()=>showCard((cIdx+1)%cData.length),5000); }
 window.jumpTo=i=>{showCard(i);startC();};
 
 async function loadReviews(){
@@ -909,7 +976,15 @@ async function loadReviews(){
   } catch(e){ renderCarousel(DEMO_REVIEWS); }
 }
 
-/* ═══════════ AUTH MODAL ═══════════ */
+const DEMO_REVIEWS = [
+  {name:'Sarah M.',service:'Full Yard Package',rating:5,text:"Niam did an amazing job on our yard. Super punctual, thorough, and left the lawn looking better than it ever has. Already booked him for next month."},
+  {name:'James T.',service:'Lawn Mowing + Edging',rating:5,text:"Really impressed. He showed up exactly on time, worked efficiently, and the edging along the driveway looks perfect. Great local option."},
+  {name:'Linda K.',service:'Leaf & Debris Cleanup',rating:5,text:"Our backyard was a mess after the storm. Niam cleaned it up in under 2 hours and even swept the patio. Highly recommend."},
+  {name:'Roberto F.',service:'Hedge Trimming',rating:4,text:"Clean, tidy work on our front hedges. They look great now. Very professional — a solid local business."},
+  {name:'Amy W.',service:'Lawn Mowing',rating:5,text:"We needed someone reliable and Niam delivered. The lawn looks clean, the clippings were cleared up, and he was very respectful. 5 stars."},
+];
+
+/* ═══ AUTH MODAL ═══ */
 window.openAuth=tab=>{document.getElementById('authOverlay').classList.add('open');switchTab(tab);};
 window.closeAuth=()=>document.getElementById('authOverlay').classList.remove('open');
 window.switchTab=t=>{
@@ -921,7 +996,7 @@ window.switchTab=t=>{
 };
 document.getElementById('authOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeAuth();});
 
-/* ═══════════ REVIEW MODAL ═══════════ */
+/* ═══ REVIEW MODAL ═══ */
 let selR=0;
 document.getElementById('openRevBtn').addEventListener('click',()=>{
   if(!currentUser){openAuth('login');showToast('Please sign in to leave a review',true);return;}
@@ -947,10 +1022,9 @@ window.submitReview=async()=>{
   } catch(e){ err.textContent='Could not post. Please try again.'; }
 };
 
-/* ═══════════ ADMIN ═══════════ */
+/* ═══ ADMIN ═══ */
 window.openAdmin=()=>{document.getElementById('adminPanel').classList.add('open');loadOrders();};
 window.closeAdmin=()=>document.getElementById('adminPanel').classList.remove('open');
-
 window.adminTab=function(tab){
   document.getElementById('bookingsPanel').classList.toggle('hidden',tab!=='bookings');
   document.getElementById('reviewsPanel').classList.toggle('hidden',tab!=='reviews');
@@ -958,7 +1032,6 @@ window.adminTab=function(tab){
   document.getElementById('tabReviews').style.cssText=tab==='reviews'?'padding:8px 20px;font-size:14px;font-weight:600;border:none;cursor:pointer;background:var(--g1);color:#fff;':'padding:8px 20px;font-size:14px;font-weight:600;border:none;cursor:pointer;background:none;color:var(--txt-3);';
   if(tab==='reviews') loadAdminReviews();
 };
-
 window.loadOrders=async()=>{
   document.getElementById('ordersList').innerHTML='<div class="empty-state">Loading…</div>';
   try {
@@ -973,7 +1046,7 @@ window.loadOrders=async()=>{
     document.getElementById('adminTs').textContent='Updated '+new Date().toLocaleTimeString();
     if(!orders.length){document.getElementById('ordersList').innerHTML='<div class="empty-state">No bookings yet.</div>';return;}
     const FL={one_time:'One-time',weekly:'Weekly',biweekly:'Bi-weekly',monthly:'Monthly'};
-    const TL={any:'Any time',morning:'Morning',afternoon:'Afternoon',evening:'Evening'};
+    const TL={any:'Any time',after3:'After 3:00pm',after4:'After 4:00pm',morning:'Morning',afternoon:'Afternoon',evening:'Evening'};
     const sorted=[...orders].reverse();
     document.getElementById('ordersList').innerHTML=sorted.map(o=>`
       <div class="order-card">
@@ -991,7 +1064,6 @@ window.loadOrders=async()=>{
       </div>`).join('');
   } catch(e){ document.getElementById('ordersList').innerHTML=`<div class="empty-state">Error: ${e.message}</div>`; }
 };
-
 window.loadAdminReviews=async()=>{
   document.getElementById('reviewsList').innerHTML='<div class="empty-state">Loading…</div>';
   try {
@@ -1013,20 +1085,17 @@ window.loadAdminReviews=async()=>{
       </div>`).join('');
   } catch(e){ document.getElementById('reviewsList').innerHTML=`<div class="empty-state">Error: ${e.message}</div>`; }
 };
-
 window.deleteReview=async(idx)=>{
   if(!confirm('Delete this review? This cannot be undone.')) return;
   const btn=document.getElementById(`del-btn-${idx}`);
   btn.textContent='Deleting…'; btn.disabled=true;
   try {
     await apiCall('deleteReview',{index:idx});
-    showToast('Review deleted');
-    loadAdminReviews();
-    loadReviews();
+    showToast('Review deleted'); loadAdminReviews(); loadReviews();
   } catch(e){ showToast('Could not delete: '+e.message,true); btn.textContent='🗑 Delete'; btn.disabled=false; }
 };
 
-/* ═══════════ TOAST ═══════════ */
+/* ═══ TOAST ═══ */
 window.showToast=(msg,isErr=false)=>{
   const t=document.getElementById('toast');
   document.getElementById('toastMsg').textContent=msg;
@@ -1034,7 +1103,7 @@ window.showToast=(msg,isErr=false)=>{
   clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),3000);
 };
 
-/* ═══════════ GRASS ═══════════ */
+/* ═══ GRASS ═══ */
 function makeGrass(){
   const row=document.getElementById('grassRow'),n=Math.ceil(window.innerWidth/6);
   let h='';
@@ -1043,12 +1112,12 @@ function makeGrass(){
 }
 makeGrass(); window.addEventListener('resize',makeGrass);
 
-/* ═══════════ MISC ═══════════ */
+/* ═══ MISC ═══ */
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>10));
 document.getElementById('prefDate').min=new Date().toISOString().split('T')[0];
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-/* ═══════════ BOOT ═══════════ */
+/* ═══ BOOT ═══ */
 renderServices();
 authInit();
 loadReviews();
